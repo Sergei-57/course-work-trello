@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trello</title>
+
+  <link rel="stylesheet" href="/index.fcb3f8e3.css">
+
+  <script src="/index.59a40e7a.js" defer=""></script>
+</head>
+
+<body>
+
+  <section class="trello-content">
+    <div class="container">
+      <div class="header p-3 mb-4 bg-info text-dark d-flex justify-content-between rounded">
+        <div class="header__content d-flex">
+          <img class="header__img" src="/trello.81b06ab3.svg" alt="#">
+          <div class="header__name fs-1 align-self-center p-2">TRELLO</div>
+        </div>
+        <div id="clock" class="header__clock p-2 bg-white text-dark rounded d-flex align-items-center fs-4"></div>
+      </div>
+
+      <div class="trello_row">
+        <div class="row align-items-start">
+          <div id="colTodo" class="col bg-light m-3 p-0 border border-dark border-2 rounded-3">
+            <div class="col-title text-center border-bottom border-2 border-dark d-flex justify-content-between p-2 pe-4 ps-4">
+              <div class="name-col">Todo</div>
+              <div id="counterActiveTodo" class="col-counter">0</div>
+            </div>
+            <div id="activeTodoCardList" class="todo-card-list"></div>
+            <div class="d-grid p-3">
+              <button id="btnAdd" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalScreenAddTodo">Add Todo</button>
+            </div>
+          </div>
+          <div id="colInProgress" class="col bg-light m-3 p-0 border border-dark border-2 rounded-3">
+            <div class="col-title text-center border-bottom border-2 border-dark d-flex justify-content-between p-2 pe-4 ps-4 mb-4">
+              <div class="name-col">In progress</div>
+              <div id="counterInProgress" class="col-counter">0</div>
+            </div>
+            <div id="inProgressTodoCardList" class="todo-card-list"></div>
+          </div>
+          <div id="colDone" class="col bg-light m-3 p-0 border border-dark border-2 rounded-3">
+            <div class="col-title text-center border-bottom border-2 border-dark d-flex justify-content-between p-2 pe-4 ps-4">
+              <div class="name-col">Done</div>
+              <div id="counterDone" class="col-counter">0</div>
+            </div>
+            <div id="doneTodoCardList" class="todo-card-list"></div>
+            <div class="d-grid p-3">
+              <button id="btnRemoveAll" class="btn btn-danger" type="button">Remove All</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+  </div></section>
+
+</body>
+
+</html>

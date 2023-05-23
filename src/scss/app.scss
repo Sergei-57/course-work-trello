@@ -1,0 +1,21 @@
+// Boostrap
+@import 'bootstrap/scss/bootstrap';
+
+// Nullstyle
+@import "./normalize";
+
+// body
+body {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  line-height: 1.3;
+  padding: 0;
+  margin: 0 auto;
+}
+
+// container
+.container {
+  max-width: 1200px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
