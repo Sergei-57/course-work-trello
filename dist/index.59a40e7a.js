@@ -700,6 +700,24 @@ function handleClickRemoveAll() {
         (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
     }
 }
+// getUsers
+getUsers(urlUsers).then((data)=>{
+    data.forEach((user)=>{
+        const template = `
+        <option value="${user.name}">${user.name}</option>
+      `;
+        selectUserElement.innerHTML += template;
+        const templateEdit = `
+        <option value="${user.name}">${user.name}</option>
+      `;
+        selectEditUserElement.innerHTML += templateEdit;
+    });
+});
+async function getUsers(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
+    return await response.json();
+}
 
 },{"./constructor.js":"ln1nT","./clock.js":"4sKTc","./helpers.js":"hGI1E","bootstrap":"h36JB"}],"ln1nT":[function(require,module,exports) {
 // Constructor
