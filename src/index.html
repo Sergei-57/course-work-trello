@@ -64,8 +64,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form id="form" class="form" action="#">
-                  <input id="modalTitle" class="modal__input" type="text" placeholder="Title">
+                <form id="form" class="form d-flex flex-column gap-1" action="#">
+                  <input id="modalTitle" class="modal__title fs-4" type="text" placeholder="Title">
                   <textarea id="modalTextarea" class="modal__textarea" cols="30" rows="10"
                     placeholder="Enter text"></textarea>
                   <select id="selectColor" class="card__select">
@@ -76,7 +76,7 @@
                     <option value="bg-success text-white">Success</option>
                   </select>
                   <select id="selectUser" class="card__select"></select>
-                  <div class="modal-footer">
+                  <div class="modal-footer d-flex gap-2">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="saveBtnModal" type="submit" class="btn btn-primary">Save card</button>
                   </div>
@@ -95,8 +95,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form id="editForm" class="form" action="#">
-                  <input id="modalEditTitle" class="modal__input" type="text" placeholder="Title">
+                <form id="editForm" class="form d-flex flex-column gap-1" action="#">
+                  <input id="modalEditTitle" class="modal__title fs-4" type="text" placeholder="Title">
                   <textarea id="modalEditTextarea" class="modal__textarea" cols="30" rows="10"
                     placeholder="Enter text"></textarea>
                   <select id="selectEditColor" class="card__select">
@@ -110,7 +110,7 @@
                   <input type="hidden" id="editStatus">
                   <input type="hidden" id="editDate">
                   <select id="selectEditUser" class="card__select"></select>
-                  <div class="modal-footer">
+                  <div class="modal-footer d-flex gap-2">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="saveEditBtnModal" type="submit" class="btn btn-primary">Save card</button>
                   </div>
