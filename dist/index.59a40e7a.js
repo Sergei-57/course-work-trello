@@ -560,13 +560,69 @@ function hmrAccept(bundle, id) {
 var _constructorJs = require("./constructor.js");
 var _clockJs = require("./clock.js");
 var _helpersJs = require("./helpers.js");
+var _buildTodoTemplateJs = require("./buildTodoTemplate.js");
 // bootstrap import
 var _bootstrap = require("bootstrap");
 // Variables
+let data = getData();
+const todoElement = document.querySelector("#todo");
+const btnAddElement = (0, _helpersJs.$)("#btnAdd");
+const btnRemoveAllElement = (0, _helpersJs.$)("#btnRemoveAll");
+const modalEditElement = document.querySelector("#editModal");
+const modalTitleElement = document.querySelector("#modalTitle");
+const modalTextareaElement = document.querySelector("#modalTextarea");
+const selectColorElement = document.querySelector("#selectColor");
+const selectUserElement = document.querySelector("#selectUser");
+const formElement = document.querySelector("#form");
+const editFormElement = document.querySelector("#editForm");
+const inProgressElement = document.querySelector("#inProgress");
+const doneElement = document.querySelector("#done");
+const rowElement = document.querySelector("#row");
+const modalEditInstance = (0, _bootstrap.Modal).getOrCreateInstance(modalEditElement);
+const modalElement = document.querySelector("#modal");
+const modalInstance = (0, _bootstrap.Modal).getOrCreateInstance(modalElement);
+// Modal edit
+const modalEditTitleELement = document.querySelector("#modalEditTitle");
+const modalEditTextareaElement = document.querySelector("#modalEditTextarea");
+const selectEditColorElement = document.querySelector("#selectEditColor");
+const selectEditUserElement = document.querySelector("#selectEditUser");
+const editId = document.querySelector("#editId");
+const editStatus = document.querySelector("#editStatus");
+const editDate = document.querySelector("#editDate");
+// url users
+const urlUsers = "https://jsonplaceholder.typicode.com/users";
+// Listener
+btnAddElement.addEventListener("click", handleModal);
+formElement.addEventListener("submit", handleSubmitForm);
+rowElement.addEventListener("click", handleClickDelete);
+window.addEventListener("beforeunload", handleBeforeUnload);
+rowElement.addEventListener("change", handleChangeStatus);
+btnRemoveAllElement.addEventListener("click", handleClickRemoveAll);
+rowElement.addEventListener("click", handleEditModal);
+editFormElement.addEventListener("submit", handleSubmitEditForm);
 // clock
 setInterval((0, _clockJs.getTime), 1000);
+// Render
+function render(data, todoColumn, progressColumn, doneColumn) {
+    let todoTemplates = "";
+    let inProgressTemplates = "";
+    let doneTemplates = "";
+    data.forEach((item)=>{
+        const template = (0, _buildTodoTemplateJs.buildTodoTemplate)(item);
+        item.status == "todo" && (todoTemplates += template);
+        item.status == "inProgress" && (inProgressTemplates += template);
+        item.status == "done" && (doneTemplates += template);
+    });
+    todoColumn.innerHTML = todoTemplates;
+    progressColumn.innerHTML = inProgressTemplates;
+    doneColumn.innerHTML = doneTemplates;
+}
+// Modal
+function handleModal() {
+    modalInstance.show();
+}
 
-},{"./constructor.js":"ln1nT","bootstrap":"h36JB","./clock.js":"4sKTc","./helpers.js":"hGI1E"}],"ln1nT":[function(require,module,exports) {
+},{"./constructor.js":"ln1nT","./clock.js":"4sKTc","./helpers.js":"hGI1E","bootstrap":"h36JB","./buildTodoTemplate.js":"dIlBs"}],"ln1nT":[function(require,module,exports) {
 // Constructor
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -613,7 +669,30 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"h36JB":[function(require,module,exports) {
+},{}],"4sKTc":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getTime", ()=>getTime);
+var _helpersJs = require("./helpers.js");
+// Variables
+const clockElement = (0, _helpersJs.$)("#clock");
+function getTime() {
+    let date = new Date();
+    let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    clockElement.innerHTML = `${hours}:${minutes}`;
+}
+
+},{"./helpers.js":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGI1E":[function(require,module,exports) {
+// helpers
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "$", ()=>$);
+function $(selector) {
+    return document.querySelector(selector);
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports) {
 /*!
   * Bootstrap v5.2.3 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6310,27 +6389,33 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4sKTc":[function(require,module,exports) {
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dIlBs":[function(require,module,exports) {
+//  build template
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "getTime", ()=>getTime);
-var _helpersJs = require("./helpers.js");
-// Variables
-const clockElement = (0, _helpersJs.$)("#clock");
-function getTime() {
-    let date = new Date();
-    let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-    let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-    clockElement.innerHTML = `${hours}:${minutes}`;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./helpers.js":"hGI1E"}],"hGI1E":[function(require,module,exports) {
-// helpers
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "$", ()=>$);
-function $(selector) {
-    return document.querySelector(selector);
+parcelHelpers.export(exports, "buildTodoTemplate", ()=>buildTodoTemplate);
+function buildTodoTemplate(todo) {
+    const date = new Date(todo.date).toLocaleString();
+    const statusTodo = todo.status == "todo" ? "selected" : "";
+    const statusInProgress = todo.status == "inProgress" ? "selected" : "";
+    const statusDone = todo.status == "done" ? "selected" : "";
+    return `
+  <div id="${todo.id}" class="m-3 p-2 border border-primary border-2 rounded-4 d-flex flex-column gap-2 ${todo.bgColor}">
+  <div class="card__top d-flex">
+    <h2 class="card__title w-100">Title: ${todo.title}</h2>
+    <span class="card__date flex-shrink-1">${date}</span>
+  </div>
+  <div class="card__description">Description: ${todo.description}</div>
+  <div class="card__user">User: ${todo.user}</div>
+  <select class="form-select select-status" data-role="select" data-id="${todo.id}">
+    <option value="todo" ${statusTodo}>Todo</option>
+    <option value="inProgress" ${statusInProgress}>In progress</option>
+    <option value="done" ${statusDone}>Done</option>
+  </select>
+  <button class="btn btn-primary me-1 ms-2" data-role="edit">Edit</button>
+  <button class="btn btn-danger me-1 ms-1" data-role="delete" data-id="${todo.id}">Remove</button>
+</div>
+ `;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["6fRhY","8lRBv"], "8lRBv", "parcelRequire9b17")
