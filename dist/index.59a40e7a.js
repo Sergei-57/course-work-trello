@@ -580,6 +580,9 @@ const modalEditElement = (0, _helpersJs.$)("#editModal");
 const modalEditInstance = (0, _bootstrap.Modal).getOrCreateInstance(modalEditElement);
 const modalElement = (0, _helpersJs.$)("#modal");
 const modalInstance = (0, _bootstrap.Modal).getOrCreateInstance(modalElement);
+const contentCountTodo = (0, _helpersJs.$)("#contentCountTodo");
+const contentCountProgress = (0, _helpersJs.$)("#contentCountProgress");
+const contentCountDone = (0, _helpersJs.$)("#contentCountDone");
 // modal edit
 const modalEditTitleELement = (0, _helpersJs.$)("#modalEditTitle");
 const modalEditTextareaElement = (0, _helpersJs.$)("#modalEditTextarea");
@@ -611,6 +614,7 @@ function handleBeforeUnload() {
 }
 // init
 (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
+(0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
 // main form
 function handleSubmitForm(event) {
     event.preventDefault();
@@ -621,6 +625,7 @@ function handleSubmitForm(event) {
     const todo = new (0, _constructorJs.Todo)(todoTitle, todoDescription, selectColor, selectUser);
     data.push(todo);
     (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
+    (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
     modalInstance.hide();
     formElement.reset();
 }
@@ -638,6 +643,7 @@ function handleSubmitEditForm(event) {
     const todo = new (0, _constructorJs.Todo)(title, description, color, user, id, date, status);
     data.push(todo);
     (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
+    (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
     modalEditInstance.hide();
     formElement.reset();
 }
@@ -669,8 +675,8 @@ function handleChangeStatus(event) {
     data.forEach((item)=>{
         item.status == "inProgress" && countProgress++;
     });
-    if (role == "select" && countProgress == 6 && target.value == "inProgress") {
-        alert("No more than 6 cases can be in this column");
+    if (role == "select" && countProgress == 4 && target.value == "inProgress") {
+        alert("No more than 4 cases can be in this column");
         data.forEach((item)=>{
             if (item.status == "todo") target.value = "todo";
             if (item.status == "done") target.value = "done";
@@ -681,6 +687,7 @@ function handleChangeStatus(event) {
             if (item.id == id) item.status = target.value;
         });
         (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
+        (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
     }
 }
 // delete card
@@ -698,6 +705,7 @@ function handleClickRemoveAll() {
     if (messageWarning) {
         data = data.filter((item)=>item.status != "done");
         (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
+        (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
     }
 }
 // getUsers
@@ -787,6 +795,7 @@ parcelHelpers.export(exports, "$", ()=>$);
 parcelHelpers.export(exports, "getData", ()=>getData);
 parcelHelpers.export(exports, "setData", ()=>setData);
 parcelHelpers.export(exports, "render", ()=>render);
+parcelHelpers.export(exports, "renderCounters", ()=>renderCounters);
 var _templateJs = require("./template.js");
 // helpers
 function $(selector) {
@@ -814,19 +823,39 @@ function render(data, todoColumn, progressColumn, doneColumn) {
     progressColumn.innerHTML = inProgressTemplates;
     doneColumn.innerHTML = doneTemplates;
 }
+// render count
+function renderCounters(collection, todoCount, inProgressCount, doneCount) {
+    let todo = 0;
+    let inProgress = 0;
+    let done = 0;
+    collection.forEach((item)=>{
+        item.status == "todo" && todo++;
+        item.status == "inProgress" && inProgress++;
+        item.status == "done" && done++;
+    });
+    const templateTodo = (0, _templateJs.buildTemplateTodo)(todo);
+    const templateProgress = (0, _templateJs.buildTemplateProgress)(inProgress);
+    const templateDone = (0, _templateJs.buildTemplateDone)(done);
+    todoCount.innerHTML = templateTodo;
+    inProgressCount.innerHTML = templateProgress;
+    doneCount.innerHTML = templateDone;
+}
 
 },{"./template.js":"4H7TW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4H7TW":[function(require,module,exports) {
 //  build template
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "buildTodoTemplate", ()=>buildTodoTemplate);
+parcelHelpers.export(exports, "buildTemplateDone", ()=>buildTemplateDone);
+parcelHelpers.export(exports, "buildTemplateProgress", ()=>buildTemplateProgress);
+parcelHelpers.export(exports, "buildTemplateTodo", ()=>buildTemplateTodo);
 function buildTodoTemplate(todo) {
     const date = new Date(todo.date).toLocaleString();
     const statusTodo = todo.status == "todo" ? "selected" : "";
     const statusInProgress = todo.status == "inProgress" ? "selected" : "";
     const statusDone = todo.status == "done" ? "selected" : "";
     return `
-  <div id="${todo.id}" class="m-3 p-2 border border-primary border-2 rounded-4 d-flex flex-column gap-2 ${todo.bgColor}">
+  <div id="${todo.id}" class="card__wrapper m-3 p-2 border border-primary border-2 rounded-4 d-flex flex-column gap-2 ${todo.bgColor}">
   <div class="card__top d-flex">
     <h2 class="card__title w-100">Title: ${todo.title}</h2>
     <span class="card__date flex-shrink-1">${date}</span>
@@ -842,6 +871,22 @@ function buildTodoTemplate(todo) {
   <button class="btn btn-danger me-1 ms-1" data-role="delete" data-id="${todo.id}">Remove</button>
 </div>
  `;
+}
+// counter template
+function buildTemplateTodo(countTodo) {
+    return `
+    <span>${countTodo}</span>
+  `;
+}
+function buildTemplateProgress(countProgress) {
+    return `
+    <span>${countProgress}</span>
+  `;
+}
+function buildTemplateDone(countDone) {
+    return `
+    <span>${countDone}</span>
+  `;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports) {

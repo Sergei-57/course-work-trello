@@ -1,4 +1,4 @@
-import { buildTodoTemplate } from './template.js'
+import { buildTodoTemplate, buildTemplateDone, buildTemplateProgress, buildTemplateTodo } from './template.js'
 
 // helpers
 function $(selector) {
@@ -32,4 +32,24 @@ function render(data, todoColumn, progressColumn, doneColumn) {
   doneColumn.innerHTML = doneTemplates
 }
 
-export { $, getData, setData, render }
+// render count
+function renderCounters(collection, todoCount, inProgressCount, doneCount) {
+  let todo = 0
+  let inProgress = 0
+  let done = 0
+
+  collection.forEach((item) => {
+    item.status == 'todo' ? todo++ : ''
+    item.status == 'inProgress' ? inProgress++ : ''
+    item.status == 'done' ? done++ : ''
+  })
+  const templateTodo = buildTemplateTodo(todo)
+  const templateProgress = buildTemplateProgress(inProgress)
+  const templateDone = buildTemplateDone(done)
+
+  todoCount.innerHTML = templateTodo
+  inProgressCount.innerHTML = templateProgress
+  doneCount.innerHTML = templateDone
+}
+
+export { $, getData, setData, render, renderCounters }

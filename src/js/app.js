@@ -1,6 +1,6 @@
 import { Todo } from './constructor.js'
 import { getTime } from './clock.js'
-import { $, render, setData, getData } from './helpers.js'
+import { $, render, renderCounters, setData, getData } from './helpers.js'
 
 
 // bootstrap import
@@ -24,6 +24,9 @@ const modalEditElement = $('#editModal')
 const modalEditInstance = Modal.getOrCreateInstance(modalEditElement)
 const modalElement = $('#modal')
 const modalInstance = Modal.getOrCreateInstance(modalElement)
+const contentCountTodo = $('#contentCountTodo')
+const contentCountProgress = $('#contentCountProgress')
+const contentCountDone = $('#contentCountDone')
 
 // modal edit
 const modalEditTitleELement = $('#modalEditTitle')
@@ -62,6 +65,7 @@ function handleBeforeUnload() {
 
 // init
 render(data, todoElement, inProgressElement, doneElement)
+renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
 
 // main form
 function handleSubmitForm(event) {
@@ -75,6 +79,7 @@ function handleSubmitForm(event) {
 
   data.push(todo)
   render(data, todoElement, inProgressElement, doneElement)
+  renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
   modalInstance.hide()
   formElement.reset()
 }
@@ -95,6 +100,7 @@ function handleSubmitEditForm(event) {
   const todo = new Todo(title, description, color, user, id, date, status)
   data.push(todo)
   render(data, todoElement, inProgressElement, doneElement)
+  renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
   modalEditInstance.hide()
   formElement.reset()
 }
@@ -130,8 +136,8 @@ function handleChangeStatus(event) {
     item.status == 'inProgress' ? countProgress++ : ''
   })
 
-  if (role == 'select' && countProgress == 6 && target.value == 'inProgress') {
-    alert('No more than 6 cases can be in this column')
+  if (role == 'select' && countProgress == 4 && target.value == 'inProgress') {
+    alert('No more than 4 cases can be in this column')
     data.forEach((item) => {
       if (item.status == 'todo') {
         target.value = 'todo'
@@ -148,6 +154,7 @@ function handleChangeStatus(event) {
       }
     })
     render(data, todoElement, inProgressElement, doneElement)
+    renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
   }
 }
 
@@ -168,6 +175,7 @@ function handleClickRemoveAll() {
   if (messageWarning) {
     data = data.filter((item) => item.status != 'done')
     render(data, todoElement, inProgressElement, doneElement)
+    renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
   }
 }
 
