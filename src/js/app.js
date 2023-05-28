@@ -2,15 +2,14 @@ import { Todo } from './constructor.js'
 import { getTime } from './clock.js'
 import { $, render, renderCounters, setData, getData } from './helpers.js'
 
-
 // bootstrap import
 import { Modal } from 'bootstrap'
 
-// Variables
+// variables
 let data = getData()
 const todoElement = $('#todo')
-const btnAddElement = $('#btnAdd')
-const btnRemoveAllElement = $('#btnRemoveAll')
+const btnAddElement = $('#buttonAdd')
+const btnRemoveAllElement = $('#buttonRemoveAll')
 const modalTitleElement = $('#modalTitle')
 const modalTextareaElement = $('#modalTextarea')
 const selectColorElement = $('#selectColor')
@@ -24,23 +23,21 @@ const modalEditElement = $('#editModal')
 const modalEditInstance = Modal.getOrCreateInstance(modalEditElement)
 const modalElement = $('#modal')
 const modalInstance = Modal.getOrCreateInstance(modalElement)
-const contentCountTodo = $('#contentCountTodo')
-const contentCountProgress = $('#contentCountProgress')
-const contentCountDone = $('#contentCountDone')
-
-// modal edit
+const countTodoElemet = $('#countTodo')
+const countInProgressElement = $('#countInProgress')
+const countDoneElement = $('#countDone')
 const modalEditTitleELement = $('#modalEditTitle')
 const modalEditTextareaElement = $('#modalEditTextarea')
 const selectEditColorElement = $('#selectEditColor')
 const selectEditUserElement = $('#selectEditUser')
-const editId = $('#editId')
-const editStatus = $('#editStatus')
-const editDate = $('#editDate')
+const editIdElement = $('#editId')
+const editDateElement = $('#editDate')
+const editStatusElement = $('#editStatus')
 
-// url users
-const urlUsers = 'https://jsonplaceholder.typicode.com/users'
+// users
+const urlUsersElement = 'https://jsonplaceholder.typicode.com/users'
 
-// Listener
+// listener
 btnAddElement.addEventListener('click', handleModal)
 formElement.addEventListener('submit', handleSubmitForm)
 rowElement.addEventListener('click', handleClickDelete)
@@ -65,7 +62,7 @@ function handleBeforeUnload() {
 
 // init
 render(data, todoElement, inProgressElement, doneElement)
-renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
+renderCounters(data, countTodoElemet, countInProgressElement, countDoneElement)
 
 // main form
 function handleSubmitForm(event) {
@@ -79,12 +76,12 @@ function handleSubmitForm(event) {
 
   data.push(todo)
   render(data, todoElement, inProgressElement, doneElement)
-  renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
+  renderCounters(data, countTodoElemet, countInProgressElement, countDoneElement)
   modalInstance.hide()
   formElement.reset()
 }
 
-// Edit form
+// edit form
 function handleSubmitEditForm(event) {
   event.preventDefault()
 
@@ -92,24 +89,24 @@ function handleSubmitEditForm(event) {
   const description = modalEditTextareaElement.value
   const color = selectEditColorElement.value
   const user = selectEditUserElement.value
-  const id = editId.value
-  const date = editDate.value
-  const status = editStatus.value
+  const id = editIdElement.value
+  const date = editDateElement.value
+  const status = editStatusElement.value
 
   data = data.filter((item) => item.id != id)
   const todo = new Todo(title, description, color, user, id, date, status)
   data.push(todo)
   render(data, todoElement, inProgressElement, doneElement)
-  renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
+  renderCounters(data, countTodoElemet, countInProgressElement, countDoneElement)
   modalEditInstance.hide()
   formElement.reset()
 }
 
-// Edit Modal
+// edit Modal
 function handleEditModal(event) {
   const { target } = event
   const { role } = target.dataset
-  const parentNode = target.closest('.card__wrapper')
+  const parentNode = target.closest('.card__wrap')
   if (role == 'edit') {
     data.forEach((item) => {
       if (item.id == parentNode.id) {
@@ -117,27 +114,49 @@ function handleEditModal(event) {
         modalEditTextareaElement.value = item.description
         selectEditColorElement.value = item.bgColor
         selectEditUserElement.value = item.user
-        editId.value = item.id
-        editStatus.value = item.status
-        editDate.value = item.date
+        editIdElement.value = item.id
+        editStatusElement.value = item.status
+        editDateElement.value = item.date
       }
     })
     modalEditInstance.show()
   }
 }
 
-// length progress
+// remove all cards
+function handleClickRemoveAll() {
+  const message = confirm('Are you sure you want to delete all cards?')
+  if (message) {
+    data = data.filter((item) => item.status != 'done')
+    render(data, todoElement, inProgressElement, doneElement)
+    renderCounters(data, countTodoElemet, countInProgressElement, countDoneElement)
+  }
+}
+
+// delete card
+function handleClickDelete(event) {
+  const { target } = event
+  const { role, id } = target.dataset
+
+  if (role == 'delete') {
+    data = data.filter((item) => item.id != id)
+    render(data, todoElement, inProgressElement, doneElement)
+    renderCounters(data, countTodoElemet, countInProgressElement, countDoneElement)
+  }
+}
+
+// overflow process
 function handleChangeStatus(event) {
   const { target } = event
   const { role, id } = target.dataset
-  let countProgress = 0
+  let countInProgress = 0
 
   data.forEach((item) => {
-    item.status == 'inProgress' ? countProgress++ : ''
+    item.status == 'inProgress' ? countInProgress++ : ''
   })
 
-  if (role == 'select' && countProgress == 4 && target.value == 'inProgress') {
-    alert('No more than 4 cases can be in this column')
+  if (role == 'select' && countInProgress == 4 && target.value == 'inProgress') {
+    alert('In this block, you can not add more than 4 cards')
     data.forEach((item) => {
       if (item.status == 'todo') {
         target.value = 'todo'
@@ -154,33 +173,12 @@ function handleChangeStatus(event) {
       }
     })
     render(data, todoElement, inProgressElement, doneElement)
-    renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
-  }
-}
-
-// delete card
-function handleClickDelete(event) {
-  const { target } = event
-  const { role, id } = target.dataset
-
-  if (role == 'delete') {
-    data = data.filter((item) => item.id != id)
-    render(data, todoElement, inProgressElement, doneElement)
-  }
-}
-
-// remove all
-function handleClickRemoveAll() {
-  const messageWarning = confirm('are you sure you want to delete all todos')
-  if (messageWarning) {
-    data = data.filter((item) => item.status != 'done')
-    render(data, todoElement, inProgressElement, doneElement)
-    renderCounters(data, contentCountTodo, contentCountProgress, contentCountDone)
+    renderCounters(data, countTodoElemet, countInProgressElement, countDoneElement)
   }
 }
 
 // getUsers
-getUsers(urlUsers)
+getUsers(urlUsersElement)
   .then((data) => {
     data.forEach((user) => {
       const template = `

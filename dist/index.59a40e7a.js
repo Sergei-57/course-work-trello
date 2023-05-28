@@ -562,11 +562,11 @@ var _clockJs = require("./clock.js");
 var _helpersJs = require("./helpers.js");
 // bootstrap import
 var _bootstrap = require("bootstrap");
-// Variables
+// variables
 let data = (0, _helpersJs.getData)();
 const todoElement = (0, _helpersJs.$)("#todo");
-const btnAddElement = (0, _helpersJs.$)("#btnAdd");
-const btnRemoveAllElement = (0, _helpersJs.$)("#btnRemoveAll");
+const btnAddElement = (0, _helpersJs.$)("#buttonAdd");
+const btnRemoveAllElement = (0, _helpersJs.$)("#buttonRemoveAll");
 const modalTitleElement = (0, _helpersJs.$)("#modalTitle");
 const modalTextareaElement = (0, _helpersJs.$)("#modalTextarea");
 const selectColorElement = (0, _helpersJs.$)("#selectColor");
@@ -580,20 +580,19 @@ const modalEditElement = (0, _helpersJs.$)("#editModal");
 const modalEditInstance = (0, _bootstrap.Modal).getOrCreateInstance(modalEditElement);
 const modalElement = (0, _helpersJs.$)("#modal");
 const modalInstance = (0, _bootstrap.Modal).getOrCreateInstance(modalElement);
-const contentCountTodo = (0, _helpersJs.$)("#contentCountTodo");
-const contentCountProgress = (0, _helpersJs.$)("#contentCountProgress");
-const contentCountDone = (0, _helpersJs.$)("#contentCountDone");
-// modal edit
+const countTodoElemet = (0, _helpersJs.$)("#countTodo");
+const countInProgressElement = (0, _helpersJs.$)("#countInProgress");
+const countDoneElement = (0, _helpersJs.$)("#countDone");
 const modalEditTitleELement = (0, _helpersJs.$)("#modalEditTitle");
 const modalEditTextareaElement = (0, _helpersJs.$)("#modalEditTextarea");
 const selectEditColorElement = (0, _helpersJs.$)("#selectEditColor");
 const selectEditUserElement = (0, _helpersJs.$)("#selectEditUser");
-const editId = (0, _helpersJs.$)("#editId");
-const editStatus = (0, _helpersJs.$)("#editStatus");
-const editDate = (0, _helpersJs.$)("#editDate");
-// url users
-const urlUsers = "https://jsonplaceholder.typicode.com/users";
-// Listener
+const editIdElement = (0, _helpersJs.$)("#editId");
+const editDateElement = (0, _helpersJs.$)("#editDate");
+const editStatusElement = (0, _helpersJs.$)("#editStatus");
+// users
+const urlUsersElement = "https://jsonplaceholder.typicode.com/users";
+// listener
 btnAddElement.addEventListener("click", handleModal);
 formElement.addEventListener("submit", handleSubmitForm);
 rowElement.addEventListener("click", handleClickDelete);
@@ -614,7 +613,7 @@ function handleBeforeUnload() {
 }
 // init
 (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
-(0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
+(0, _helpersJs.renderCounters)(data, countTodoElemet, countInProgressElement, countDoneElement);
 // main form
 function handleSubmitForm(event) {
     event.preventDefault();
@@ -625,33 +624,33 @@ function handleSubmitForm(event) {
     const todo = new (0, _constructorJs.Todo)(todoTitle, todoDescription, selectColor, selectUser);
     data.push(todo);
     (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
-    (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
+    (0, _helpersJs.renderCounters)(data, countTodoElemet, countInProgressElement, countDoneElement);
     modalInstance.hide();
     formElement.reset();
 }
-// Edit form
+// edit form
 function handleSubmitEditForm(event) {
     event.preventDefault();
     const title = modalEditTitleELement.value;
     const description = modalEditTextareaElement.value;
     const color = selectEditColorElement.value;
     const user = selectEditUserElement.value;
-    const id = editId.value;
-    const date = editDate.value;
-    const status = editStatus.value;
+    const id = editIdElement.value;
+    const date = editDateElement.value;
+    const status = editStatusElement.value;
     data = data.filter((item)=>item.id != id);
     const todo = new (0, _constructorJs.Todo)(title, description, color, user, id, date, status);
     data.push(todo);
     (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
-    (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
+    (0, _helpersJs.renderCounters)(data, countTodoElemet, countInProgressElement, countDoneElement);
     modalEditInstance.hide();
     formElement.reset();
 }
-// Edit Modal
+// edit Modal
 function handleEditModal(event) {
     const { target  } = event;
     const { role  } = target.dataset;
-    const parentNode = target.closest(".card__wrapper");
+    const parentNode = target.closest(".card__wrap");
     if (role == "edit") {
         data.forEach((item)=>{
             if (item.id == parentNode.id) {
@@ -659,24 +658,43 @@ function handleEditModal(event) {
                 modalEditTextareaElement.value = item.description;
                 selectEditColorElement.value = item.bgColor;
                 selectEditUserElement.value = item.user;
-                editId.value = item.id;
-                editStatus.value = item.status;
-                editDate.value = item.date;
+                editIdElement.value = item.id;
+                editStatusElement.value = item.status;
+                editDateElement.value = item.date;
             }
         });
         modalEditInstance.show();
     }
 }
-// length progress
+// remove all cards
+function handleClickRemoveAll() {
+    const message = confirm("Are you sure you want to delete all cards?");
+    if (message) {
+        data = data.filter((item)=>item.status != "done");
+        (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
+        (0, _helpersJs.renderCounters)(data, countTodoElemet, countInProgressElement, countDoneElement);
+    }
+}
+// delete card
+function handleClickDelete(event) {
+    const { target  } = event;
+    const { role , id  } = target.dataset;
+    if (role == "delete") {
+        data = data.filter((item)=>item.id != id);
+        (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
+        (0, _helpersJs.renderCounters)(data, countTodoElemet, countInProgressElement, countDoneElement);
+    }
+}
+// overflow process
 function handleChangeStatus(event) {
     const { target  } = event;
     const { role , id  } = target.dataset;
-    let countProgress = 0;
+    let countInProgress = 0;
     data.forEach((item)=>{
-        item.status == "inProgress" && countProgress++;
+        item.status == "inProgress" && countInProgress++;
     });
-    if (role == "select" && countProgress == 4 && target.value == "inProgress") {
-        alert("No more than 4 cases can be in this column");
+    if (role == "select" && countInProgress == 4 && target.value == "inProgress") {
+        alert("In this block, you can not add more than 4 cards");
         data.forEach((item)=>{
             if (item.status == "todo") target.value = "todo";
             if (item.status == "done") target.value = "done";
@@ -687,29 +705,11 @@ function handleChangeStatus(event) {
             if (item.id == id) item.status = target.value;
         });
         (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
-        (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
-    }
-}
-// delete card
-function handleClickDelete(event) {
-    const { target  } = event;
-    const { role , id  } = target.dataset;
-    if (role == "delete") {
-        data = data.filter((item)=>item.id != id);
-        (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
-    }
-}
-// remove all
-function handleClickRemoveAll() {
-    const messageWarning = confirm("are you sure you want to delete all todos");
-    if (messageWarning) {
-        data = data.filter((item)=>item.status != "done");
-        (0, _helpersJs.render)(data, todoElement, inProgressElement, doneElement);
-        (0, _helpersJs.renderCounters)(data, contentCountTodo, contentCountProgress, contentCountDone);
+        (0, _helpersJs.renderCounters)(data, countTodoElemet, countInProgressElement, countDoneElement);
     }
 }
 // getUsers
-getUsers(urlUsers).then((data)=>{
+getUsers(urlUsersElement).then((data)=>{
     data.forEach((user)=>{
         const template = `
         <option value="${user.name}">${user.name}</option>
@@ -809,7 +809,7 @@ function setData(source) {
     localStorage.setItem("data", JSON.stringify(source));
 }
 // render
-function render(data, todoColumn, progressColumn, doneColumn) {
+function render(data, todoColumn, inProgressColumn, doneColumn) {
     let todoTemplates = "";
     let inProgressTemplates = "";
     let doneTemplates = "";
@@ -820,7 +820,7 @@ function render(data, todoColumn, progressColumn, doneColumn) {
         item.status == "done" && (doneTemplates += template);
     });
     todoColumn.innerHTML = todoTemplates;
-    progressColumn.innerHTML = inProgressTemplates;
+    inProgressColumn.innerHTML = inProgressTemplates;
     doneColumn.innerHTML = doneTemplates;
 }
 // render count
@@ -834,10 +834,10 @@ function renderCounters(collection, todoCount, inProgressCount, doneCount) {
         item.status == "done" && done++;
     });
     const templateTodo = (0, _templateJs.buildTemplateTodo)(todo);
-    const templateProgress = (0, _templateJs.buildTemplateProgress)(inProgress);
+    const templateInProgress = (0, _templateJs.buildTemplateInProgress)(inProgress);
     const templateDone = (0, _templateJs.buildTemplateDone)(done);
     todoCount.innerHTML = templateTodo;
-    inProgressCount.innerHTML = templateProgress;
+    inProgressCount.innerHTML = templateInProgress;
     doneCount.innerHTML = templateDone;
 }
 
@@ -847,7 +847,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "buildTodoTemplate", ()=>buildTodoTemplate);
 parcelHelpers.export(exports, "buildTemplateDone", ()=>buildTemplateDone);
-parcelHelpers.export(exports, "buildTemplateProgress", ()=>buildTemplateProgress);
+parcelHelpers.export(exports, "buildTemplateInProgress", ()=>buildTemplateInProgress);
 parcelHelpers.export(exports, "buildTemplateTodo", ()=>buildTemplateTodo);
 function buildTodoTemplate(todo) {
     const date = new Date(todo.date).toLocaleString();
@@ -855,7 +855,7 @@ function buildTodoTemplate(todo) {
     const statusInProgress = todo.status == "inProgress" ? "selected" : "";
     const statusDone = todo.status == "done" ? "selected" : "";
     return `
-  <div id="${todo.id}" class="card__wrapper m-3 p-2 border border-primary border-2 rounded-4 d-flex flex-column gap-2 ${todo.bgColor}">
+  <div id="${todo.id}" class="card__wrap m-3 p-2 border border-primary border-2 rounded-4 d-flex flex-column gap-2 ${todo.bgColor}">
   <div class="card__top d-flex">
     <h2 class="card__title w-100">Title: ${todo.title}</h2>
     <span class="card__date flex-shrink-1">${date}</span>
@@ -878,9 +878,9 @@ function buildTemplateTodo(countTodo) {
     <span>${countTodo}</span>
   `;
 }
-function buildTemplateProgress(countProgress) {
+function buildTemplateInProgress(countInProgress) {
     return `
-    <span>${countProgress}</span>
+    <span>${countInProgress}</span>
   `;
 }
 function buildTemplateDone(countDone) {

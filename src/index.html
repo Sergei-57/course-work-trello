@@ -21,7 +21,7 @@
           <img class="header__img" src="./images/trello.svg" alt="#">
           <div class="header__name fs-1 align-self-center p-2">TRELLO</div>
         </div>
-        <div id="clock" class="header__clock p-2 bg-white text-dark rounded d-flex align-items-center fs-4"></div>
+        <div id="clock" class="p-2 bg-white text-dark rounded d-flex align-items-center fs-4"></div>
       </div>
 
       <div class="trello_row">
@@ -30,18 +30,18 @@
             <div
               class="col-title text-center border-bottom border-2 border-dark d-flex justify-content-between p-2 pe-4 ps-4">
               <div class="name-col">Todo</div>
-              <div id="contentCountTodo" class="content__top"></div>
+              <div id="countTodo" class="count"></div>
             </div>
             <div id="todo" class="todo-card-list"></div>
             <div class="d-grid p-3">
-              <button id="btnAdd" class="btn btn-primary" type="button" data-role="addTodo">Add Todo</button>
+              <button id="buttonAdd" class="btn btn-primary" type="button" data-role="addTodo">Add Todo</button>
             </div>
           </div>
           <div class="col bg-light m-3 p-0 border border-dark border-2 rounded-3">
             <div
               class="col-title text-center border-bottom border-2 border-dark d-flex justify-content-between p-2 pe-4 ps-4 mb-4">
               <div class="name-col">In progress</div>
-              <div id="contentCountProgress" class="content__top"></div>
+              <div id="countInProgress" class="count"></div>
             </div>
             <div id="inProgress" class="todo-card-list"></div>
           </div>
@@ -49,11 +49,11 @@
             <div
               class="col-title text-center border-bottom border-2 border-dark d-flex justify-content-between p-2 pe-4 ps-4">
               <div class="name-col">Done</div>
-              <div id="contentCountDone" class="content__top"></div>
+              <div id="countDone" class="count"></div>
             </div>
             <div id="done" class="todo-card-list"></div>
             <div class="d-grid p-3">
-              <button id="btnRemoveAll" class="btn btn-danger" type="button">Remove All</button>
+              <button id="buttonRemoveAll" class="btn btn-danger" type="button">Remove All</button>
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@
         <!-- modal -->
         <div id="modal" class="modal" tabindex="-1">
           <div class="modal-dialog">
-            <div class="modal-content modal__content">
+            <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title fs-1 fw-bold">Create a Todo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -71,17 +71,17 @@
                   <input id="modalTitle" class="modal__title fs-4" type="text" placeholder="Title">
                   <textarea id="modalTextarea" class="modal__textarea" cols="30" rows="10"
                     placeholder="Enter text"></textarea>
-                  <select id="selectColor" class="card__select">
+                  <select id="selectColor" class="select__card-color">
                     <option selected>Color</option>
-                    <option value="bg-secondary text-white">Secondary</option>
-                    <option value="bg-info text-dark">Info</option>
+                    <option value="bg-dark text-white">Dark</option>
                     <option value="bg-warning text-dark">Warning</option>
+                    <option value="bg-info text-dark">Info</option>
                     <option value="bg-success text-white">Success</option>
                   </select>
-                  <select id="selectUser" class="card__select"></select>
+                  <select id="selectUser" class="select__card-user"></select>
                   <div class="modal-footer d-flex gap-2">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="saveBtnModal" type="submit" class="btn btn-primary">Save card</button>
+                    <button id="saveButtonModal" type="submit" class="btn btn-primary">Save card</button>
                   </div>
                 </form>
               </div>
@@ -92,7 +92,7 @@
         <!-- modal edit -->
         <div id="editModal" class="modal" tabindex="-1">
           <div class="modal-dialog">
-            <div class="modal-content modal__content">
+            <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title fs-1 fw-bold">Create a Todo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -102,20 +102,20 @@
                   <input id="modalEditTitle" class="modal__title fs-4" type="text" placeholder="Title">
                   <textarea id="modalEditTextarea" class="modal__textarea" cols="30" rows="10"
                     placeholder="Enter text"></textarea>
-                  <select id="selectEditColor" class="card__select">
+                  <select id="selectEditColor" class="select__card-color">
                     <option selected>Color</option>
-                    <option value="bg-secondary text-white">Secondary</option>
-                    <option value="bg-info text-dark">Info</option>
+                    <option value="bg-dark text-white">Dark</option>
                     <option value="bg-warning text-dark">Warning</option>
+                    <option value="bg-info text-dark">Info</option>
                     <option value="bg-success text-white">Success</option>
                   </select>
                   <input type="hidden" id="editId">
                   <input type="hidden" id="editStatus">
                   <input type="hidden" id="editDate">
-                  <select id="selectEditUser" class="card__select"></select>
+                  <select id="selectEditUser" class="select__card-user"></select>
                   <div class="modal-footer d-flex gap-2">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="saveEditBtnModal" type="submit" class="btn btn-primary">Save card</button>
+                    <button id="saveEditButtonModal" type="submit" class="btn btn-primary">Save card</button>
                   </div>
                 </form>
               </div>

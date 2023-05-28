@@ -5,7 +5,7 @@ function buildTodoTemplate(todo) {
   const statusInProgress = todo.status == 'inProgress' ? 'selected' : ''
   const statusDone = todo.status == 'done' ? 'selected' : ''
   return `
-  <div id="${todo.id}" class="card__wrapper m-3 p-2 border border-primary border-2 rounded-4 d-flex flex-column gap-2 ${todo.bgColor}">
+  <div id="${todo.id}" class="card__wrap m-3 p-2 border border-primary border-2 rounded-4 d-flex flex-column gap-2 ${todo.bgColor}">
   <div class="card__top d-flex">
     <h2 class="card__title w-100">Title: ${todo.title}</h2>
     <span class="card__date flex-shrink-1">${date}</span>
@@ -29,9 +29,9 @@ function buildTemplateTodo(countTodo) {
     <span>${countTodo}</span>
   `
 }
-function buildTemplateProgress(countProgress) {
+function buildTemplateInProgress(countInProgress) {
   return `
-    <span>${countProgress}</span>
+    <span>${countInProgress}</span>
   `
 }
 function buildTemplateDone(countDone) {
@@ -40,4 +40,4 @@ function buildTemplateDone(countDone) {
   `
 }
 
-export { buildTodoTemplate, buildTemplateDone, buildTemplateProgress, buildTemplateTodo }
+export { buildTodoTemplate, buildTemplateDone, buildTemplateInProgress, buildTemplateTodo }
